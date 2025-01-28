@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <h2>Ваши уведомления</h2>
+  
+  {% if notifications %}
+    <div class="list-group">
+      {% for notification in notifications %}
+        <div class="list-group-item">
+          <p>{{ notification.message }}</p>
+          <small class="text-muted">Получено: {{ notification.created_at|date:"d M Y, H:i" }}</small>
+          <hr>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info" role="alert">
+      У вас нет новых уведомлений.
+    </div>
+  {% endif %}
+    <div class="d-flex">
+      <a href="{% url 'films:home' %}" class="ms-auto btn btn-outline-primary">На главную</a>
+      <a href="{% url 'notifications:settings' %}" class="ms-auto btn btn-outline-primary">К настройкам</a>
+    </div>
+  
+{% endblock %}

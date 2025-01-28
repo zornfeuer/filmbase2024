@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <h2>Настройки уведомлений</h2>
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form layout='floating' %}
+    <div class="d-flex">
+      {% bootstrap_button button_type="submit" content="Сохранить настройки" %}
+      <a href="{% url 'notifications:notifications' %}" class="ms-auto btn btn-outline-primary">Назад</a>
+    </div>
+    
+  </form>
+{% endblock %}
