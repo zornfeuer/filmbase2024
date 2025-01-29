@@ -12,7 +12,7 @@ class NotificationSetting(models.Model):
     notify_on_actor_update = models.BooleanField(default=False)
     followed_actors = models.ManyToManyField(Person, blank=True)
     frequency = models.CharField(max_length=20, choices=[
-        ('immediate', 'Сразу после внесения данных'),
+        ('immediate', 'Незамедлительно'),
         ('weekly', 'Раз в неделю'),
         ('monthly', 'Раз в месяц'),
     ])

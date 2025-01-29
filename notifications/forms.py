@@ -16,8 +16,9 @@ class NotificationSettingForm(forms.ModelForm):
         widgets = {
                 'followed_actors': forms.SelectMultiple(attrs={
                         'class': 'form-select',
-                        'size': '5'
-                    }),
+                        'size': 5,
+                }),
+
         }
 
     def __init__(self, *args, **kwargs):
