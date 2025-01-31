@@ -1,16 +1,27 @@
-{% extends 'base.html' %}
+{% extends 'films/base.html' %}
 {% load django_bootstrap5 %}
+{%load films_tags%}
 
+{% block breadcrumb %}
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'notifications:notifications' %}">
+          {{"Уведомления"}}
+        </a>
+      </li>
+      <li class="breadcrumb-item active">
+        Настройки уведомлений
+      </li>
+    </ol>
+  </nav>
+{% endblock %}
 {% block content %}
-  <div class="container-fluid">
-    <h2 class="mb-4">Настройки уведомлений</h2>
-    <form method="post">
-      {% csrf_token %}
-      {% bootstrap_form form layout='floating' %}
-      <div class="d-flex justify-content-between mt-4">
-        {% bootstrap_button button_type="submit" content="Сохранить настройки" class="btn btn-primary" %}
-        <a href="{% url 'notifications:notifications' %}" class="btn btn-outline-primary">Назад</a>
-      </div>
-    </form>
-  </div>
+  <h1>Настройки уведомлений</h1>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form%}
+    {{ form.media }}
+    {% bootstrap_button button_type="submit" content="Сохранить" %}
+  </form>
 {% endblock %}

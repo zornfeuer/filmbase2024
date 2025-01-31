@@ -5,12 +5,25 @@ from notifications.models import Notification, NotificationSetting
 from notifications.forms import NotificationSettingForm
 
 
+@login_required
 def notifications_view(request):
-    notifications = Notification.objects.filter(
-            user=request.user.id, is_sent=False
-            ).order_by('created_at')
-    return render(request, 'notifications.html',
-                  {'notifications': notifications})
+    if request.method == 'POST':
+        # Обработка отметки уведомлений как прочитанных
+        notification_ids = request.POST.getlist('notification_ids')
+        Notification.objects.filter(
+                id__in=notification_ids,
+                user=request.user).update(is_read=True)
+
+    # Получение уведомлений
+    show_read = request.POST.get('show_read', 'off') == 'on'
+    notifications = Notification.objects.filter(user=request.user.id)
+    if not show_read:
+        notifications = notifications.filter(is_read=False)
+
+    return render(request, 'notifications.html', {
+        'notifications': notifications,
+        'show_read': show_read,
+    })
 
 
 @login_required

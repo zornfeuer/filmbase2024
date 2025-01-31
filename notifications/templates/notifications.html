@@ -5,17 +5,28 @@
   <div class="container-fluid">
     <h2 class="mb-4">Ваши уведомления</h2>
     
-    {% if notifications %}
+    <form method="post">
+      {% csrf_token %}
       <div class="list-group">
         {% for notification in notifications %}
           <div class="list-group-item p-3 mb-3">
             <p>{{ notification.message }}</p>
             <small class="text-muted">Получено: {{ notification.created_at|date:"d M Y, H:i" }}</small>
+            <input type="checkbox" name="notification_ids" value="{{ notification.id }}" {% if notification.is_read %}checked{% endif %}>
             <hr>
           </div>
         {% endfor %}
       </div>
-    {% else %}
+
+      <div class="d-flex mt-4">
+        <button type="submit" class="btn btn-outline-primary me-2">Отметить как прочитанные</button>
+        <label>
+          <input type="checkbox" name="show_read" {% if show_read %}checked{% endif %} onchange="this.form.submit();"> Показать прочитанные
+        </label>
+      </div>
+    </form>
+
+    {% if not notifications %}
       <div class="alert alert-info" role="alert">
         У вас нет новых уведомлений.
       </div>
@@ -31,4 +42,5 @@
     </div>
   </div>
 {% endblock %}
+
 

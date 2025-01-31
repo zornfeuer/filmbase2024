@@ -1,4 +1,5 @@
 from django import forms
+from dal import autocomplete
 from notifications.models import NotificationSetting
 
 
@@ -9,14 +10,13 @@ class NotificationSettingForm(forms.ModelForm):
             'notify_on_movie_update',
             'notify_on_new_movie',
             'notify_on_actor_update',
-            'followed_actors',
+            'people',
             'frequency',
+            'user_mail',
         ]
         widgets = {
-                'followed_actors': forms.SelectMultiple(attrs={
-                        'class': 'form-select',
-                        'size': 5,
-                }),
+            'people': autocomplete.ModelSelect2Multiple(
+                url='films:person_autocomplete'),
 
         }
 
@@ -28,6 +28,8 @@ class NotificationSettingForm(forms.ModelForm):
             "Уведомлять о новых фильмах?"
         self.fields['notify_on_actor_update'].label = \
             "Уведомлять об изменениях страниц актеров?"
-        self.fields['followed_actors'].label = \
+        self.fields['people'].label = \
             "Актеры для подписки"
         self.fields['frequency'].label = "Частота уведомлений"
+        self.fields['user_mail'].label = \
+            "Почта для уведомлений"

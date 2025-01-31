@@ -26,14 +26,13 @@ def create_notification_for_person_update(person):
     message = f'Обновлена информация о {person.name}'
 
     for setting in settings:
-        if (setting.followed_actors.filter(id=person.id).exists()
-           or not setting.followed_actors.exists()):
+        if (setting.people.filter(id=person.id).exists()
+           or not setting.people.exists()):
             Notification.objects.create(user=setting.user, message=message)
 
 
 @receiver(post_save, sender=Film)
 def film_updated(sender, instance, created, **kwargs):
-    print(f"Signal received for Film: {instance.name}, created: {created}")
     if created:
         create_notification_for_new_film(instance)
         return
@@ -42,7 +41,6 @@ def film_updated(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Person)
 def person_updated(sender, instance, created, **kwargs):
-    print(f"Signal received for Person: {instance.name}, created: {created}")
     if created:
         return
     create_notification_for_person_update(instance)

@@ -1,4 +1,3 @@
-from config import email, password
 """
 Django settings for filmbase project.
 
@@ -12,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
+from config import email, password
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -140,6 +141,23 @@ LOGIN_REDIRECT_URL = 'films:home'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Celery schedule
+
+CELERY_BEAT_SCHEDULE = {
+    'send-immediate': {
+        'task': 'filmbase2024.signup.tasks.send_immediate',
+        'schedule': crontab(minute='*/5'),
+    },
+    'send-weekly': {
+        'task': 'filmbase2024.signup.tasks.send_weekly',
+        'schedule': crontab(0, 0, day_of_week='mon'),
+    },
+    'send-monthly': {
+        'task': 'filmbase2024.signup.tasks.send_monthly',
+        'schedule': crontab(0, 0, day_of_month=1),
+    },
+}
 
 # Mail configuration block
 

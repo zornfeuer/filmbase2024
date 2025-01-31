@@ -9,7 +9,8 @@ class NotificationSetting(models.Model):
     notify_on_movie_update = models.BooleanField(default=False)
     notify_on_new_movie = models.BooleanField(default=False)
     notify_on_actor_update = models.BooleanField(default=False)
-    followed_actors = models.ManyToManyField(Person, blank=True)
+    people = models.ManyToManyField(Person, blank=True)
+    user_mail = models.EmailField(max_length=254, blank=True, null=True)
     frequency = models.CharField(max_length=20, choices=[
         ('immediate', 'Незамедлительно'),
         ('weekly', 'Раз в неделю'),
@@ -22,3 +23,4 @@ class Notification(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_sent = models.BooleanField(default=False)
+    is_read = models.BooleanField(default=False)

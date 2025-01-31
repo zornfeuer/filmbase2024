@@ -13,14 +13,14 @@ class NotificationSignalTests(TestCase):
         # Создание пользователя и настроек уведомлений
         self.user = User.objects.create_user(
                 username='testuser',
-                password='testpass',
-                email=test_mail
+                password='testpass'
                 )
         self.notification_setting = NotificationSetting.objects.create(
             user=self.user,
             notify_on_new_movie=True,
             notify_on_movie_update=True,
             notify_on_actor_update=True,
+            user_mail=test_mail,
         )
 
         # Создание необходимых объектов для тестов
@@ -80,7 +80,7 @@ class NotificationSignalTests(TestCase):
     def test_no_notification_for_unfollowed_actor(self):
         # Создание нового человека
         person = Person.objects.create(name='Тестовый человек')
-        self.notification_setting.followed_actors.clear()
+        self.notification_setting.people.clear()
 
         # Обновление человека
         person.name = 'Обновленный человек'
@@ -95,7 +95,7 @@ class NotificationSignalTests(TestCase):
     def test_notification_for_followed_actor(self):
         # Создание нового человека
         person = Person.objects.create(name='Тестовый человек')
-        self.notification_setting.followed_actors.add(person)
+        self.notification_setting.people.add(person)
 
         # Обновление человека
         person.name = 'Обновленный человек'
