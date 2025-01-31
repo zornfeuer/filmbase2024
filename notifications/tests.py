@@ -3,6 +3,8 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from films.models import Film, Person, Country, Genre
 from notifications.models import NotificationSetting, Notification
+from notifications.utils import send_email_notification
+from config import test_mail
 
 
 class NotificationSignalTests(TestCase):
@@ -11,7 +13,8 @@ class NotificationSignalTests(TestCase):
         # Создание пользователя и настроек уведомлений
         self.user = User.objects.create_user(
                 username='testuser',
-                password='testpass'
+                password='testpass',
+                email=test_mail
                 )
         self.notification_setting = NotificationSetting.objects.create(
             user=self.user,
@@ -42,6 +45,7 @@ class NotificationSignalTests(TestCase):
                 notifications[0].message,
                 f'Новый фильм "{self.film.name}".'
                 )
+        send_email_notification(self.user, notifications[0].message)
 
     def test_create_notification_for_film_update(self):
 

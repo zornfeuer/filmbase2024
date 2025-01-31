@@ -6,7 +6,6 @@ from films.models import Person
 
 class NotificationSetting(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    user_mail = models.EmailField(max_length=254, blank=True, null=True)
     notify_on_movie_update = models.BooleanField(default=False)
     notify_on_new_movie = models.BooleanField(default=False)
     notify_on_actor_update = models.BooleanField(default=False)

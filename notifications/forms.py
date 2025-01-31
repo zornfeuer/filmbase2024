@@ -6,7 +6,6 @@ class NotificationSettingForm(forms.ModelForm):
     class Meta:
         model = NotificationSetting
         fields = [
-            'user_mail',
             'notify_on_movie_update',
             'notify_on_new_movie',
             'notify_on_actor_update',
@@ -32,5 +31,3 @@ class NotificationSettingForm(forms.ModelForm):
         self.fields['followed_actors'].label = \
             "Актеры для подписки"
         self.fields['frequency'].label = "Частота уведомлений"
-        self.fields['user_mail'].label = \
-            "Почта для уведомлений"

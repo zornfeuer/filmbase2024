@@ -1,3 +1,4 @@
+from config import email, password
 """
 Django settings for filmbase project.
 
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     'dal',
     'dal_select2',
     "django_bootstrap5",
+    "django_extensions",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -138,3 +140,12 @@ LOGIN_REDIRECT_URL = 'films:home'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Mail configuration block
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = email
+EMAIL_HOST_PASSWORD = password
