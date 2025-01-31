@@ -6,8 +6,9 @@ from notifications.forms import NotificationSettingForm
 
 
 def notifications_view(request):
-    notifications = Notification.objects.filter(user=request.user.id).order_by(
-            'created_at')
+    notifications = Notification.objects.filter(
+            user=request.user.id, is_sent=False
+            ).order_by('created_at')
     return render(request, 'notifications.html',
                   {'notifications': notifications})
 

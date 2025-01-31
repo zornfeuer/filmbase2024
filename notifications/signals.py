@@ -1,46 +1,48 @@
 from django.db.models.signals import post_save
-from django.dispatch import reciever
+from django.dispatch import receiver
 
 from notifications.models import NotificationSetting, Notification
-from films.models import Movie, Actor
+from films.models import Film, Person
 
 
-def create_notification_for_new_movie(movie):
+def create_notification_for_new_film(film):
     settings = NotificationSetting.objects.filter(notify_on_new_movie=True)
-    message = f'Новый фильм "{movie.title}" в жанре "{movie.genre}".'
+    message = f'Новый фильм "{film.name}".'
 
     for setting in settings:
         Notification.objects.create(user=setting.user, message=message)
 
 
-def create_notification_for_movie_update(movie):
+def create_notification_for_film_update(film):
     settings = NotificationSetting.objects.filter(notify_on_movie_update=True)
-    message = f'Обновлена информация о фильме "{movie.title}"'
+    message = f'Обновлена информация о фильме "{film.name}"'
 
     for setting in settings:
         Notification.objects.create(user=setting.user, message=message)
 
 
-def create_notification_for_actor_update(actor):
+def create_notification_for_person_update(person):
     settings = NotificationSetting.objects.filter(notify_on_actor_update=True)
-    message = f'Обновлена информация о {actor.name}'
+    message = f'Обновлена информация о {person.name}'
 
     for setting in settings:
-        if (setting.followed_actors.filter(id=actor.id).exists()
+        if (setting.followed_actors.filter(id=person.id).exists()
            or not setting.followed_actors.exists()):
             Notification.objects.create(user=setting.user, message=message)
 
 
-@reciever(post_save, sender=Movie)
-def movie_updated(sender, instance, created, **kwargs):
+@receiver(post_save, sender=Film)
+def film_updated(sender, instance, created, **kwargs):
+    print(f"Signal received for Film: {instance.name}, created: {created}")
     if created:
-        create_notification_for_new_movie(instance)
+        create_notification_for_new_film(instance)
         return
-    create_notification_for_movie_update(instance)
+    create_notification_for_film_update(instance)
 
 
-@reciever(post_save, sender=Actor)
-def actor_updated(sender, instance, created, **kwargs):
+@receiver(post_save, sender=Person)
+def person_updated(sender, instance, created, **kwargs):
+    print(f"Signal received for Person: {instance.name}, created: {created}")
     if created:
         return
-    create_notification_for_actor_update(instance)
+    create_notification_for_person_update(instance)

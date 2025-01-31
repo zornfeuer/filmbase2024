@@ -3,7 +3,7 @@ from celery import Celery
 
 os.environ.setdefault(
         'DJANGO_SETTINGS_MODULE',
-        'filmbase2024.notifications.settings'
+        'filmbase.settings'
         )
 
 app = Celery('filmbase2024')
